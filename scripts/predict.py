@@ -1,32 +1,53 @@
-import tensorflow as tf
-import numpy as np
-import cv2
 import sys
-import os
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
 
-# Load the model
-MODEL_PATH = '../models/saved_model'
-model = tf.keras.models.load_model(MODEL_PATH)
+# --------------------
+# CONFIGURATION
+# --------------------
+MODEL_PATH = 'fine_tuned_model.h5'
+IMAGE_SIZE = (224, 224)
 
-# Define image preprocessing
-def preprocess_image(image_path, img_size=224):
-    img = cv2.imread(image_path)
-    img = cv2.resize(img, (img_size, img_size))
-    img = img.astype('float32') / 255.0
-    img = np.expand_dims(img, axis=0)
-    return img
+# --------------------
+# LOAD THE MODEL
+# --------------------
+print("Loading the model...")
+model = load_model(MODEL_PATH)
+print("Model loaded successfully.")
 
-# Predict function
-def predict(image_path):
-    img = preprocess_image(image_path)
-    prediction = model.predict(img)[0][0]
-    label = "Crack" if prediction > 0.5 else "No Crack"
-    confidence = prediction if prediction > 0.5 else 1 - prediction
-    print(f"Prediction: {label} (Confidence: {confidence:.2f})")
+# --------------------
+# LOAD AND PREPROCESS IMAGE
+# --------------------
+def load_and_preprocess_image(img_path):
+    img = image.load_img(img_path, target_size=IMAGE_SIZE)
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    img_array /= 255.0  # normalize
+    return img_array
 
-# Run from command line
+# --------------------
+# PREDICT FUNCTION
+# --------------------
+def predict_image(img_path):
+    img_array = load_and_preprocess_image(img_path)
+    prediction = model.predict(img_array)[0][0]  # single output, sigmoid
+    return prediction
+
+# --------------------
+# MAIN
+# --------------------
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print("Usage: python predict.py <path_to_image>")
+        print("Usage: python predict.py <image_path>")
+        sys.exit(1)
+
+    image_path = sys.argv[1]
+    prediction = predict_image(image_path)
+
+    # Threshold for classification (0.5 by default)
+    if prediction >= 0.5:
+        print(f"Prediction: CRACK DETECTED ({prediction:.2f})")
     else:
-        predict(sys.argv[1])
+        print(f"Prediction: NO CRACK ({prediction:.2f})")
