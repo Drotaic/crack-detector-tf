@@ -1,0 +1,18 @@
+## 📂 Datasets
+
+Here are some useful datasets that you can use to train and evaluate the crack detection AI model:
+
+- [Concrete Crack Segmentation Dataset (DatasetNinja)](https://datasetninja.com/concrete-crack-segmentation-dataset#download)  
+  A comprehensive dataset for crack segmentation tasks and it has it's own AI so you can pre-train.
+
+- [Concrete and Pavement Crack Dataset (Mendeley Data)](https://data.mendeley.com/datasets/429vzbgmbx/1)  
+  Includes concrete and pavement surfaces captured with UAVs and smartphones.
+
+- [Concrete Crack Images for Classification (Kaggle)](https://www.kaggle.com/datasets/arnavr10880/concrete-crack-images-for-classification?resource=download)  
+  40,000 images of cracked and non-cracked concrete surfaces.
+
+- [SDNET2018 (Utah State University)](https://digitalcommons.usu.edu/all_datasets/48/)  
+  Extensive images of cracked and non-cracked concrete bridge decks, walls, and pavements.
+
+Feel free to use any of these datasets to train, fine-tune, or evaluate your own models. 
+If you integrate them, please refer to their respective licenses and cite the original authors where required.
